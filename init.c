@@ -28,7 +28,7 @@ int isboot_from_norflash()
 	volatile unsigned int *p = (volatile unsigned int *)0x00000000;
 	unsigned int v;
 
-	v = *p
+	v = *p;
 	*p = 0x12345678;
 
 
