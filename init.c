@@ -154,7 +154,7 @@ void copycode2sdram(unsigned char *psrc, unsigned char *pdesc, unsigned int len)
 
 void clearbss()
 {
-	extern int __bss_start, __bss_end;
+	extern unsigned int __bss_start, __bss_end;
 
 	unsigned int *p = &__bss_start;
 

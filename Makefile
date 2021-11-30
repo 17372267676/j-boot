@@ -6,7 +6,7 @@ OBJCOPY = arm-linux-objcopy
 OBJDUMP = arm-linux-objdump
 
 CFLAGS 		:= -Wall -O2
-CPPFLAGS   	:= -nostdinc
+CPPFLAGS   	:= -nostdinc -nostdlib -fno-builtin
 
 objs := start.o init.o boot.o
 

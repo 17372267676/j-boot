@@ -2,6 +2,11 @@
 
 static struct tag * params;
 
+extern void uart0_init(void);
+extern void nand_read(unsigned int addr, unsigned char *buf, unsigned int len);
+void puts(char *str);
+
+
 void setup_start_tag ()
 {
 	params = (struct tag *) 0x30000100;
@@ -41,8 +46,8 @@ static int strlen(char *str)
 
 static void strcpy(char *dest, char *src)
 {
-	while ((*dest++ = *src++) != '\0')
-		/* nothing */;
+	while ((*dest++ = *src++) != '\0');
+		/* nothing */
 }
 
 
@@ -67,7 +72,7 @@ void setup_end_tag ()
 
 
 
-void main()
+int main()
 {
 
 	void (*theKernel)(int zero, int arch, unsigned int params);
@@ -77,7 +82,7 @@ void main()
 
 	puts("copy kernel from nandflash\n\r");
 	/*从nandflash把kernel读入内存*/
-	nand_read(0x00060000 + 64, 0x30008000, 0x200000);
+	nand_read(0x00060000 + 64, (unsigned char *)0x30008000, 0x200000);
 
 	/*设置参数*/
 	puts("set boot params\n\r");
@@ -92,5 +97,6 @@ void main()
 	theKernel = (void (*)(int, int, unsigned int))0x30008000;
 	theKernel(0, 362, 0x30000100);
 	puts("boot error\n\r");
+	return -1;
 
 }
