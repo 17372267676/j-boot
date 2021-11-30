@@ -1,6 +1,10 @@
 SECTIONS {
 	. = 0x33F80000;
-	.text : { *(.text) }
+	.text : 
+	{
+		start.o (.text)
+		*(.text) 
+	}
 
 	. = ALIGN(4);
 	.rodata : { *(.rodata) }
