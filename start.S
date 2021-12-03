@@ -1,4 +1,5 @@
 #define S3C2440_MPLL_200MHZ     ((0x5c<<12)|(0x01<<4)|(0x02))
+#define S3C2440_MPLL_400MHZ     ((92<<12)|(1<<4)|(1<<0))
 #define MEM_CTL_BASE    0x48000000
 
 
@@ -13,9 +14,15 @@ _start:
 	str r1, [r0]
 
 /* 2.初始化时钟 */
-	/* CLKDIVN(0x4C000014) = 0X3, tFCLK:tHCLK:tPCLK = 1:2:4  */
+	/* CLKDIVN(0x4C000014) = 0X3, tFCLK:tHCLK:tPCLK = 1:4:8  */
+
+	/* LOCKTIME(0x4C000000) = 0xFFFFFFFF */
+	ldr r0, =0x4C000000
+	ldr r1, =0xFFFFFFFF
+	str r1, [r0]
+
 	ldr r0, =0x4C000014
-	ldr r1, =0x3
+	ldr r1, =0x5
 	str r1, [r0]
 
 	/* 设置CPU工作于异步模式 */
@@ -23,10 +30,16 @@ _start:
 	orr r0,r0,#0xc0000000   //R1_nF:OR:R1_iA
 	mcr p15,0,r0,c1,c0,0
 
-	/* MPLLCON = S3C2440_MPLL_200MHZ */
+	/* MPLLCON = S3C2440_MPLL_400MHZ */
 	ldr r0, =0x4C000004
-	ldr r1, =(0x5c<<12)|(0x01<<4)|(0x02)
+	ldr r1, =S3C2440_MPLL_400MHZ
 	str r1, [r0]
+
+/*enable icache*/
+	mrc	p15, 0, r0, c1, c0, 0
+	orr r0, r0, #(1<<12)
+	mcr	p15, 0, r0, c1, c0, 0
+
 
 /* 3.初始化SDRAM */
 	ldr r0, =MEM_CTL_BASE
